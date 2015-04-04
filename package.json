@@ -1,0 +1,34 @@
+{
+  "name": "november",
+  "version": "0.1.0",
+  "description": "A simple CLI for generating an Ember.js-friendly backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "preferGlobal": true,
+  "bin": {
+    "november": "index.js"
+  },
+  "keywords": [
+    "ember",
+    "emberjs",
+    "node",
+    "nodejs",
+    "backend",
+    "orm"
+  ],
+  "author": "Tristan Edwards",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0",
+    "bluebird": "^2.9.24",
+    "colors": "^1.0.3",
+    "inflect": "^0.3.0",
+    "mkdirp": "^0.5.0",
+    "prettyjson": "^1.1.0"
+  },
+  "devDependencies": {
+    "ncp": "^2.0.0"
+  }
+}
