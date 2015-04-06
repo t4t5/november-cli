@@ -1,3 +1,5 @@
+var generateModel = require('./new-model');
+
 module.exports = function(userArgs) {
   var fileType = userArgs[1];
 
@@ -12,22 +14,14 @@ module.exports = function(userArgs) {
 
   switch (fileType) {
 
-    // case "router":
-    //   nov.generateFile('template-files/router.js', 'router.js', function(err) {
-    //     if (err) {
-    //       return nov.logErr(err);
-    //     }
-    //   });
-    //   break;
-
     case "model":
       var modelName = userArgs[2];
 
-      nov.generateModel(modelName, function(err) {
+      generateModel(modelName, function(err) {
         if (err) {
           return nov.logErr(err);
         }
-        nov.logInfo("Updated router.js");
+        nov.logSuccess(modelName + " model created");
       });
       break;
 

@@ -1,14 +1,5 @@
-exports.getRouter = function getRouter(router, controller) {
+var controller = require('./controllers')
 
-  // Users
-  router.route('/users')
-    .get(controller.users.list)
-    .post(controller.users.add);
-    
-  router.route('/users/:user_id')
-    .get(controller.users.load)
-    .put(controller.users.update)
-    .delete(controller.users.remove);
+module.exports = function(app) {
 
-  return router;
-}
+};
