@@ -2,20 +2,9 @@
 
 'use strict';
 
-global.fs      = require('fs');
-global.inflect = require('inflect');
-global.path    = require('path');
-global.Promise = require('bluebird');
-global.mkdirp  = require('mkdirp');
-global.async   = require('async');
-
-global.colors  = require('./lib/colors');          // Log messages in color
-global.nov     = require('./lib/nov');             // Tiny library for November-specific stuff
-
 // November commands
-var createProject = require('./actions/new-project');
+var newProject    = require('./actions/new-project');
 var generateFiles = require('./actions/generate-files');
-
 
 
 // Everything starts here...
@@ -28,7 +17,7 @@ function readFromCommand(userArgs) {
   switch (action) {
 
     case "new":
-      createProject(userArgs);
+      newProject(userArgs);
       break;
 
     case "generate":
@@ -37,8 +26,8 @@ function readFromCommand(userArgs) {
       break;
 
     default:
-      nov.logErr("Invalid command");
+      console.log("Invalid command".error);
       console.log("Here are some things you can do:".help);
-
   }
+
 }

@@ -1,10 +1,12 @@
-module.exports = function(req, res, next) {
+module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}.create(req.body.{{x-singular}}, function (err, {{x-singular}}) {
-    if (err) return giveError(err, req, res);
-    
-    console.log({{x-singular}});
-    res.json({{x-singular}});
+  req.models.{{x-singular}}
+  .create(req.body.{{x-singular}})
+  .then(function({{x-singular}}) {
+    render({{x-singular}});
+  })
+  .catch(function(err) {
+    render(err);
   });
 
 };

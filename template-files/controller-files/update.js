@@ -1,12 +1,24 @@
-module.exports = function(req, res, next) {
+module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}.get(req.params.{{x-singular}}_id, function(err, {{x-singular}}) {
-    {{x-singular}}.save(req.body.{{x-singular}}, function(err) {
-      if (err) return giveError(err, req, res);
-      
-      console.log("saved!");
-      res.json({{x-singular}});
-    });
+  req.models.{{x-singular}}.find({
+    where: {
+      id: req.params.{{x-singular}}_id 
+    }
+  })
+  .then(function({{x-singular}}) {
+    
+    /*
+     * Set new values like this:
+     * {{x-singular}}.some_field_name = req.body.{{x-singular}}.someFieldName;
+     */
+     
+    return {{x-singular}}.save();
+  })
+  .then(function({{x-singular}}) {
+    render({{x-singular}});
+  })
+  .catch(function(err) {
+    render(err);
   });
 
 };

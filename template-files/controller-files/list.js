@@ -1,9 +1,12 @@
-module.exports = function(req, res, next) {
+module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}.find(function(err, {{x-plural}}) {
-    if (err) return giveError(err, req, res);
-
-    res.json({ {{x-plural}}: {{x-plural}} });
+  req.models.{{x-singular}}
+  .findAll()
+  .then(function({{x-plural}}) {
+    render({{x-plural}});
+  })
+  .catch(function(err) {
+    render(err);
   });
 
 };

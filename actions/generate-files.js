@@ -1,9 +1,12 @@
-var generateModel = require('./new-model');
+var nov            = require('../lib/nov');
+var colors         = require('../lib/colors');
+var generateModel  = require('./generate-model');
+var generateAction = require('./generate-action');
 
 module.exports = function(userArgs) {
   var fileType = userArgs[1];
 
-  if (!nov.isNovemberDir()) {
+  if (!nov.novemberDir()) {
     return nov.logErr("You have to be inside a November project in order to use this command.");
   }
 
@@ -17,15 +20,23 @@ module.exports = function(userArgs) {
     case "model":
       var modelName = userArgs[2];
 
-      generateModel(modelName, function(err) {
-        if (err) {
-          return nov.logErr(err);
-        }
+      generateModel(modelName).then(function() {
         nov.logSuccess(modelName + " model created");
-      });
+      }).catch(nov.logErr);
+
+      break;
+
+    case "action":
+      var actionName = userArgs[2];
+
+      generateAction(actionName).then(function() {
+        nov.logSuccess(actionName + " action created");
+      }).catch(nov.logErr);
+
       break;
 
     default:
       nov.logErr('Unknown file type');
+
   }
-}
+};

@@ -1,9 +1,17 @@
-module.exports = function(req, res, next) {
+module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}.get(req.params.{{x-singular}}_id, function(err, {{x-singular}}) {
-    if (err) return giveError(err, req, res);
-
-    res.json({ {{x-singular}}: {{x-singular}} });
+  req.models.{{x-singular}}.find({
+    where: {
+      id: req.params.{{x-singular}}_id 
+    }
+  })
+  .then(function({{x-singular}}) {
+    render({
+      model: {{x-singular}}
+    });
+  })
+  .catch(function(err) {
+    render(err);
   });
 
 };

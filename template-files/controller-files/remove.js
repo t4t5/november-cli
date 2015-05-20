@@ -1,12 +1,18 @@
-module.exports = function(req, res, next) {
+module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}.get(req.params.{{x-singular}}_id, function (err, {{x-singular}}) {
-    {{x-singular}}.remove(function (err) {
-      if (err) return giveError(err, req, res);
-      
-      console.log("removed!");
-      res.json({});
-    });
+  req.models.{{x-singular}}.find({
+    where: {
+      id: req.params.{{x-singular}}_id 
+    } 
+  })
+  .then(function({{x-singular}}) {
+    return {{x-singular}}.destroy();
+  })
+  .then(function() {
+    res.json({});
+  })
+  .catch(function(err) {
+    render(err);
   });
 
 };

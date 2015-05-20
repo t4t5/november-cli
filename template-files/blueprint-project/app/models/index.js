@@ -1,23 +1,32 @@
-var database = require('../../config/database');
-require('dotenv').load();
+'use strict';
 
-var connection = null;
+var fs        = require('fs');
+var path      = require('path');
+var Sequelize = require('sequelize');
+var inflect   = require('inflect');
+var basename  = path.basename(module.filename);
+var env       = process.env.NODE_ENV || 'development';
+var config    = require(__dirname + '/../../config/config.json')[env];
+var sequelize = new Sequelize(config.database, config.username, config.password, config);
+var db        = {};
 
-function setup(db, cb) {
-
-  return cb(null, db);
-}
-
-module.exports = function(cb) {
-  if (connection) return cb(null, connection);
-
-  orm.connect(database, function (err, db) {
-    if (err) return cb(err);
-
-    connection = db;
-    db.settings.set('instance.returnAllErrors', true);
-
-    db.alias = {};
-    setup(db, cb);
+fs
+  .readdirSync(__dirname)
+  .filter(function(file) {
+    return (file.indexOf('.') !== 0) && (file !== basename);
+  })
+  .forEach(function(file) {
+    var model = sequelize['import'](path.join(__dirname, file));
+    db[inflect.singularize(model.name)] = model;
   });
-};
+
+Object.keys(db).forEach(function(modelName) {
+  if ('associate' in db[modelName]) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;

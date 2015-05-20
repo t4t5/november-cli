@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "database_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false,
+    "allow_origin": "http://localhost:4200"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "allow_origin": "http://localhost:4200"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "allow_origin": "http://example.com"
+  }
+}
