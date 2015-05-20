@@ -2,6 +2,7 @@
 
 var fs        = require('fs');
 var path      = require('path');
+var inflect   = require('inflect');
 var basename  = path.basename(module.filename);
 var models    = {};
 
@@ -11,7 +12,8 @@ fs
     return (file.indexOf('.') !== 0) && (file !== basename);
   })
   .forEach(function(file) {
-    models[file] = require('./' + file + '/.index.js');
+    var underscore = inflect.singularize(inflect.underscore(file));
+    models[underscore] = require('./' + file + '/.index.js');
   });
 
 module.exports = models;

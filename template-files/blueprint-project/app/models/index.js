@@ -17,7 +17,8 @@ fs
   })
   .forEach(function(file) {
     var model = sequelize['import'](path.join(__dirname, file));
-    db[inflect.singularize(model.name)] = model;
+    var underscoreModel = inflect.singularize(inflect.underscore(model.name));
+    db[underscoreModel] = model;
   });
 
 Object.keys(db).forEach(function(modelName) {

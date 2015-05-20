@@ -1,9 +1,9 @@
 module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}
+  req.models.{{x-singular-underscore}}
   .findAll()
-  .then(function({{x-plural}}) {
-    render({{x-plural}});
+  .then(function({{x-plural-camelcase}}) {
+    render({{x-plural-camelcase}});
   })
   .catch(function(err) {
     render(err);

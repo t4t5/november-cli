@@ -5,31 +5,44 @@ var handy      = require('./handy');
 
 /*
  * Take a Sequelize error (or one thrown by the user) and >
- * > show the error clearly for the dev while showing a human-friendly
- * > error for the browser user
+ * > show a detailed error for the dev while showing a human-friendly
+ * > error for the client user
  */
 module.exports = function(err, req, res, next) {
   var userErr = generateUserError(req);
-  errorForDev(req, err);
-  errorForUser(res, userErr[0], userErr[1]);
+
+  if (typeof err === "string") {
+    userErr[1] = err;
+  }
+
+  if (err.constructor && err.constructor === Array
+    && err.length > 1
+    && (typeof err[0] === "number") && (typeof err[1] === "string")) {
+    
+    userErr[0] = err[0];
+    userErr[1] = err[1];
+  }
+
+  errorForDev(req, err, userErr);
+  errorForUser(res, userErr);
 };
 
 // Error that the client user sees in the browser (JSON)
-function errorForUser(res, code, message) {
+function errorForUser(res, err) {
   var errorObj = {
-    code: code,
-    message: message
+    code: err[0],
+    title: err[1]
   };
 
-  res.status(code).json({ error: errorObj });
+  res.status(err[0]).json({ error: errorObj });
   return true;
 }
 
 // Error that the developer sees in the terminal
-function errorForDev(req, err) {
+function errorForDev(req, err, userErr) {
   var errorObj = {
-    code: err.code,
-    api_message: generateUserError(req)[1],
+    code: err.code || userErr[0],
+    api_message: userErr[1],
     error: err.message
   };
 

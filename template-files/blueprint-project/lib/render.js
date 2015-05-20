@@ -3,7 +3,6 @@ var giveJSON = require('./give-json');
 
 module.exports = function(obj, req, res, next) {
 
-  // Testing
   var isValidModel = (
     obj.constructor && obj.constructor === Array && obj.length === 0
     || (obj[0] && obj[0].dataValues)
@@ -14,7 +13,6 @@ module.exports = function(obj, req, res, next) {
   if (isValidModel) {
 
     var model, opts;
-
     if (obj.model) {
       model = obj.model;
       opts = obj;
@@ -23,7 +21,6 @@ module.exports = function(obj, req, res, next) {
       model = obj;
       opts = null;
     }
-
     return giveJSON(req, res, model, opts);
   } else {
     return giveError(obj, req, res);

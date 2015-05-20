@@ -14,6 +14,10 @@ module.exports = function(userArgs) {
     return nov.logErr("You need to specify what you want to generate");
   }
 
+  if (!userArgs[2]) {
+    return nov.logErr("You need to specify the name of what you want to generate!");
+  }
+
 
   switch (fileType) {
 
@@ -36,7 +40,7 @@ module.exports = function(userArgs) {
       break;
 
     default:
-      nov.logErr('Unknown file type');
+      nov.logErr('Unknown type. Did you mean `november generate model ' + userArgs[2] + '`?');
 
   }
 };

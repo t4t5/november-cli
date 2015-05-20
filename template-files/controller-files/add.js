@@ -1,9 +1,9 @@
 module.exports = function(req, res, render) {
 
-  req.models.{{x-singular}}
-  .create(req.body.{{x-singular}})
-  .then(function({{x-singular}}) {
-    render({{x-singular}});
+  req.models.{{x-singular-underscore}}
+  .create(req.body.{{x-singular-camelcase}})
+  .then(function({{x-singular-camelcase}}) {
+    render({{x-singular-camelcase}});
   })
   .catch(function(err) {
     render(err);

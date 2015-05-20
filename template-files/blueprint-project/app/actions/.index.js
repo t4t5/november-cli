@@ -2,6 +2,7 @@
 
 var fs        = require('fs');
 var path      = require('path');
+var inflect   = require('inflect');
 var basename  = path.basename(module.filename);
 var controls  = {};
 
@@ -12,7 +13,8 @@ fs
   })
   .forEach(function(file) {
     var baseName = path.basename(file, '.js');
-    controls[baseName] = require('./' + file);
+    var underscoreName = inflect.underscore(baseName);
+    controls[underscoreName] = require('./' + file);
   });
 
 module.exports = controls;

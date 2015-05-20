@@ -23,7 +23,7 @@ module.exports = function(actionName) {
   }
   catch (e) {
     var actionFileName   = inflect.parameterize(actionName);
-    var routerFileEnding = "\n\n};"
+    var routerFileEnding = '\n\n};'
     var routerContents;
 
     // Get current contents of router.js file and remove last part
@@ -34,7 +34,7 @@ module.exports = function(actionName) {
     })
     // Inject the code for a new route and save the new router.js file
     .then(function(actionCode) {
-      actionCode     = '\n' + nov.fillTemplatePlaceholders(actionCode, actionName);
+      actionCode     = nov.fillTemplatePlaceholders(actionCode, actionName);
       routerContents = routerContents + actionCode + routerFileEnding;
       return fs.writeFileAsync(nov.novemberDir() + 'app/router.js', routerContents, 'utf8');
     })

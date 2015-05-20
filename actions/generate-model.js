@@ -38,9 +38,7 @@ module.exports = function(modelName) {
     })
     // Inject the code for a new route and save the new router.js file
     .then(function(routeCode) {
-      console.log("before_fill_template".info);
-      routeCode = '\n' + nov.fillTemplatePlaceholders(routeCode, modelName);
-      console.log("after_fill_template".info);
+      routeCode = nov.fillTemplatePlaceholders(routeCode, modelName);
       routerContents = routerContents + routeCode + routerFileEnding;
       return fs.writeFileAsync(nov.novemberDir() + 'app/router.js', routerContents);
     })
