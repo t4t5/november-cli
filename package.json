@@ -1,7 +1,7 @@
 {
   "name": "november",
   "version": "0.1.0",
-  "description": "A simple CLI for generating an Ember.js-friendly Node.js backend",
+  "description": "Generate a Node.js API for your Ember.js app ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,10 @@
   "preferGlobal": true,
   "bin": {
     "november": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t4t5/november-cli"
   },
   "keywords": [
     "ember",
@@ -19,7 +23,7 @@
     "backend",
     "orm"
   ],
-  "author": "Tristan Edwards",
+  "author": "Tristan Edwards <tristan.edwards@me.com> (http://tristanedwards.me)",
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
