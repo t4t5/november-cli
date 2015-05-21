@@ -5,6 +5,7 @@ module.exports = function(obj, req, res, next) {
 
   var isValidModel = (
     obj.constructor && obj.constructor === Array && obj.length === 0
+    || obj.model
     || (obj[0] && obj[0].dataValues)
     || obj.dataValues
   );

@@ -1,5 +1,5 @@
 {
-  "name": "november",
+  "name": "november-cli",
   "version": "0.1.0",
   "description": "Generate a Node.js API for your Ember.js app ",
   "main": "index.js",

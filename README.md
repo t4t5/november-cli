@@ -136,7 +136,7 @@ If your sequelize model includes [associated models](http://docs.sequelizejs.com
 }
 ```
 
-However, you can  also opt out of sideloading, or specify if you want some (or all) associations to be embedded instead.
+However, you can also specify if you want some (or all) associations to be embedded instead.
 
 Here we specify that we want the tweets-association to be embedded. If we wanted *all* associations to be embedded, we would set `embedded: true`
 ```javascript
