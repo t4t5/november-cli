@@ -102,15 +102,15 @@ function generateUserError(req) {
     }
 
     if (isLoad) {
-      return [404, "Could not load the " + modelSingular + " with id " + modelId];
+      return [500, "Could not load the " + modelSingular + " with id " + modelId];
     } else if (isUpdate) {
-      return [406, "Could not update the " + modelSingular + " with id " + modelId];
+      return [500, "Could not update the " + modelSingular + " with id " + modelId];
     } else if (isDelete) {
-      return [412, "Could not delete the " + modelSingular + " with id " + modelId];
+      return [500, "Could not delete the " + modelSingular + " with id " + modelId];
     } else if (isList) {
-      return [404, "Could not load " + modelPlural];
+      return [500, "Could not load " + modelPlural];
     } else if (isAdd) {
-      return [412, "Could not create a new " + modelSingular];
+      return [500, "Could not create a new " + modelSingular];
     }
   }
 
