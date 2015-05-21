@@ -1,21 +1,21 @@
 ![November logo](http://tristanedwards.me/u/november/logotype.png)
 
-November helps you generate a minimal Node.js API specifically tailored for Ember.js apps.
+November helps you generate a simple Node.js API tailored for [Ember.js](http://emberjs.com) apps, with the help of [Express](http://expressjs.com) and [Sequelize](http://docs.sequelizejs.com/en/latest).
 
 
 Installation
 ------------
+```bash
+$ npm install -g november-cli
 ```
-$ npm install november-cli -g
-```
+
 
 Get started
 -----------
-Create a new app with:
-```
+```bash
 $ november new my-app
 ```
-
+This will create a new project with the following structure:
 ```
 ├── app
 │   ├── actions
@@ -33,45 +33,76 @@ $ november new my-app
 ├── public
 ├── server.js
 ├── test
-│   │   ├── 00_Getting_Started.md
-│   │   ├── 01_Examples
-│   │   │   ├── 01_GitHub_Flavored_Markdown.md
-│   │   │   ├── 05_Code_Highlighting.md
-│   │   ├── 05_More_Examples
-│   │   │   ├── Hello_World.md
-│   │   │   ├── 05_Code_Highlighting.md
 ```
 
-Open `config/config.json` and tweak the values for your development environment.
-By default, MySQL is used as a database, but you can use anything you want as long as it’s supported by Sequelize.
+By default, MySQL is used as a database, but you can use any relational database [supported by Sequelize](http://docs.sequelizejs.com/en/latest) by changing the values in `config/config.json`.
 
-To run the app, run `npm start` in your app’s directory and visit localhost:9000
+To run the app, run `npm start` (or just `nodemon` if you have it installed) in your app’s directory and visit `localhost:9000`.
+
+
+In your Ember.js app
+--------------------
+
+Make sure you change the host in your Ember.js adapter file so that it can communicate with November:
+```bash
+# In your ember project folder
+$ ember generate adapter
+```
+```javascript
+// app/adapters/application.js
+import DS from "ember-data";
+
+export default DS.RESTAdapter.reopen({ 
+  host: 'http://localhost:9000'
+});
+```
 
 
 Models
 ------
-```
-$ november g model user
+```bash
+$ november generate model user
 ```
 
-November has now generated:
+This generates:
 - A **model file** (`app/models/user.js`) for the user, which will determine the structure of the database table
-- **Routes** in `app/router.js` for creating, reading, updating and deleting users (based on the conventions of Ember Data)
-- **Controller files**, which link the routes to database actions:
+- **Routes** in `app/router.js` for creating, reading, updating and deleting users (based on the conventions of Ember Data). Feel free to remove the actions you don't need.
+- **Controller files**, which hook up the routes to database actions:
   - `app/controllers/user/add.js`
   - `app/controllers/user/list.js`
   - `app/controllers/user/load.js`
   - `app/controllers/user/update.js`
   - `app/controllers/user/remove.js`
 
-Set some fields in your user model and make sure your local database is running.
-After that, visit localhost:9000/users
+With the app and your local database running in the background, visit `localhost:9000/users`, and you should see:
+```json
+{
+  "users": []
+}
+```
+The table `users` has automatically been created in your database.
+
+
+Actions
+-------
+Actions are for API endpoints which are not specifically tied to any model.
+```bash
+$ november generate action login
+```
+
+This generates:
+- An **action file** (`app/actions/login.js`)
+- A **route** in `app/router.js` (`POST` by default)
+
 
 Render()
 -------
-The render method is used for rendering both your *models* and your *error messages*. It takes a single argument.
+The `render()`-method in your controllers is used for rendering both your *models* and your *error messages*. It takes a single argument.
 
-If you pass a valid sequelize model to render(), it will generate that model according to the JSON API conventions used by Ember Data.
+
+Rendering models
+-------------
+If you pass a valid sequelize model to `render()`, it will generate that model according to the [JSON API](http://jsonapi.org) conventions used by Ember Data.
 
 The most basic usage:
 ```
@@ -86,28 +117,28 @@ render({
 returns:
 ```javascript
 {
-  user: {
-    ...
+  "user": {
+    <...>
   }
 }
 ```
 
-If your sequelize model contains associated models, they are sideloaded by default:
+If your sequelize model includes [associated models](http://docs.sequelizejs.com/en/latest/api/associations), they are sideloaded by default:
 ```javascript
 {
-  user: {
-    ...
-    tweets: [1, 5]
+  "user": {
+    <...>
+    "tweets": [1, 5]
   },
-  tweets: [
-    ...
+  "tweets": [
+    <...>
   ]
 }
 ```
 
 However, you can  also opt out of sideloading, or specify if you want some (or all) associations to be embedded instead.
 
-Here we specify that we want the tweets associations to be embedded. If we wanted all associations to be embedded, we would set `embedded: true`
+Here we specify that we want the tweets-association to be embedded. If we wanted *all* associations to be embedded, we would set `embedded: true`
 ```javascript
 render({
   model: <your-sequelize-model>,
@@ -117,20 +148,97 @@ render({
 ... which returns:
 ```javascript
 {
-  user: {
-    ...
-    tweets: [
-      { ...},
-      { ...}
+  "user": {
+    <...>
+    "tweets": [
+      {
+        id: 1,
+        <...>
+      },
+      {
+        id: 5,
+        <...>
+      }
     ]
-  },
-  tweets: [
-    ...
-  ]
+  }
 }
 ```
 
-Actions
+Rendering errors
+---------------
+
+Controllers generated by November rely heavily on promises. If they catch an error, they call `render(error)`.
+
+Let's say we accidentally search for a field (`name`) which doesn't exist in our database table:
+
+```javascript
+// app/controllers/user/list.js
+req.models.user
+.findAll({
+  where: {
+    name: "Bob"
+  }
+})
+.then(function(users) {
+  // Not gonna happen
+})
+.catch(function(err) {
+  render(err);
+});
+```
+
+An error will be catched and `render(err)` will return this JSON to the client:
+```json
+{
+  "error": {
+    "code": 500,
+    "message": "Could not load users"
+  }
+}
+```
+... while still showing a more descriptive error to the developer in the console so that you can locate the problem:
+
+![A console error](http://tristanedwards.me/u/november/console-error.png)
+
+You can also render your own exceptions to the user, by throwing a **string** with the error message or an **array** where the first element is the error code and the second is the error message:
+
+```javascript
+// app/controllers/user/update.js
+req.models.user.find({
+  where: {
+    username: req.params.username
+  }
+})
+.then(function(user) {
+  if (user.id !== req.user) {
+    throw [403, "You are not allowed to edit this user!"]
+  }
+  return user.save();
+})
+.then(function(user) {
+  // Not gonna happen
+})
+.catch(function(err) {
+  render(err);
+});
+```
+
+...what the client will see:
+```json
+{
+  "error": {
+    "code": 403,
+    "message": "You are not allowed to edit this user!"
+  }
+}
+```
+
+Todos
+-----
+TDD is not really my thing, but it would be nice to get some automatic Mocha tests when you generate new models. :)
+
+Contact
 -------
-By default, they are POST
+
+If you have any questions, feel free to [ping me on Twitter](https://twitter.com/t4t5) or just open an issue!
 
