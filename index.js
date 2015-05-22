@@ -5,6 +5,7 @@
 // November commands
 var newProject    = require('./actions/new-project');
 var generateFiles = require('./actions/generate-files');
+var showHelp      = require('./actions/show-help');
 
 
 // Everything starts here...
@@ -17,6 +18,7 @@ function readFromCommand(userArgs) {
   switch (action) {
 
     case "new":
+    case "n":
       newProject(userArgs);
       break;
 
@@ -25,9 +27,15 @@ function readFromCommand(userArgs) {
       generateFiles(userArgs);
       break;
 
+    case "help":
+    case "h":
+      showHelp();
+      break;
+
     default:
       console.log("Invalid command".error);
-      console.log("Here are some things you can do:".help);
+      showHelp();
+      //console.log("Here are some things you can do:".help);
   }
 
 }
