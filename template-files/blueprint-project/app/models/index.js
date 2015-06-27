@@ -7,9 +7,17 @@ var inflect   = require('inflect');
 var basename  = path.basename(module.filename);
 var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../../config/config.json')[env];
-var sequelize = new Sequelize(config.database, config.username, config.password, config);
 var db        = {};
+var sequelize;
 
+// Create database connection
+if (env === 'production') {
+  sequelize = new Sequelize(process.env.DATABASE_URL);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+// Import models
 fs
   .readdirSync(__dirname)
   .filter(function(file) {
