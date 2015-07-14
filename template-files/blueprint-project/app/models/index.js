@@ -4,6 +4,7 @@ var fs        = require('fs');
 var path      = require('path');
 var Sequelize = require('sequelize');
 var inflect   = require('inflect');
+var ssaclAttributeRoles = require('ssacl-attribute-roles');
 var basename  = path.basename(module.filename);
 var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../../config/config.json')[env];
@@ -16,6 +17,9 @@ if (env === 'production') {
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+// Attribute whitelisting/blacklisting
+ssaclAttributeRoles(sequelize);
 
 // Import models
 fs

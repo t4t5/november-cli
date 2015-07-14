@@ -1,5 +1,7 @@
 'use strict';
 
+var ssaclAttributeRoles = require('ssacl-attribute-roles');
+
 module.exports = function(sequelize, DataTypes) {
   var {{x-singular-capitalize}} = sequelize.define('{{x-table}}', {
     /*
@@ -37,6 +39,8 @@ module.exports = function(sequelize, DataTypes) {
      * http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
      */
   });
+
+  ssaclAttributeRoles({{x-singular-capitalize}});
 
   return {{x-singular-capitalize}};
 };

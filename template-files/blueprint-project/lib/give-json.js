@@ -138,11 +138,11 @@ function unwrapProperties(obj) {
     objData = [];
     if (obj.length) {
       obj.forEach(function(objEl) {
-        objData.push(objEl.dataValues);
+        objData.push(objEl.get());
       });
     }
   } else {
-    objData = obj.dataValues;
+    objData = obj.get();
   }
 
   // Get pseudo (computed) properties
