@@ -1,6 +1,6 @@
 {
   "name": "november-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate a Node.js API for your Ember.js app ",
   "main": "index.js",
   "scripts": {
