@@ -1,4 +1,4 @@
-![November logo](http://tristanedwards.me/u/november/logotype.png)
+![November logo](https://raw.githubusercontent.com/t4t5/november-cli/master/november-logo.png)
 
 November helps you generate a simple Node.js API tailored for [Ember.js](http://emberjs.com) apps, with the help of [Express](http://expressjs.com) and [Sequelize](http://docs.sequelizejs.com/en/latest).
 
